@@ -1,6 +1,8 @@
 import arcade
 import settings
-
+"""
+Must be ran with sudo on linux.
+"""
 
 def main():
     print("Prepare for the alien invasion.")
