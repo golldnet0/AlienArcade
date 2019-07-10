@@ -14,6 +14,7 @@ class AlienArcade(arcade.Window):
 
         #  create sprite lists and set them to none
         self.alien_list = None
+        self.ship = None
 
     def setup(self):
         #  Create sprites and sprite lists here
@@ -41,15 +42,19 @@ class AlienArcade(arcade.Window):
         """
         All the logic to move and all game logic
         """
-        pass
+        self.ship.update()
 
-    def on_key_press(self, key, key_modifiers):
-        pass
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.RIGHT:
+            self.ship.change_x = self.ai_settings.ship_speed_factor
+        if key == arcade.key.LEFT:
+            self.ship.change_x = -self.ai_settings.ship_speed_factor
     
-    def on_key_release(self, key, key_modifiers):
-        pass
+    def on_key_release(self, key, modifiers):
+        if key == arcade.key.RIGHT or key == arcade.key.LEFT:
+            self.ship.change_x = 0
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
+    def on_mouse_press(self, x, y, button, modifiers):
         pass
 
 

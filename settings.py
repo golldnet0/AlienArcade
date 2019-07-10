@@ -24,7 +24,7 @@ class Settings():
         self.initizlize_dynamic_settings()
 
     def initizlize_dynamic_settings(self):
-        self.ship_speed_factor = 1.5  # how fast the ship will move (1.5px)
+        self.ship_speed_factor = 5  # how fast the ship will move (1.5px)
         self.ship_lives = 2
         self.bullet_speed_factor = 5
         self.alien_speed_factor = 1
