@@ -9,14 +9,21 @@ class AlienArcade(arcade.Window):
         super().__init__(self.ai_settings.screen_width, 
                          self.ai_settings.screen_height, 
                          "Alien Arcade")
-        arcade.set_background_color(arcade.color.BLACK)
+        arcade.set_background_color(arcade.color.WHITE)
         
 
         #  create sprite lists and set them to none
+        self.alien_list = None
 
     def setup(self):
         #  Create sprites and sprite lists here
-        pass
+        
+        self.ship = arcade.Sprite("images/shipBlue_manned.png")
+        self.ship.scale = 0.5
+        self.ship.center_x = self.ai_settings.screen_width / 2
+        self.ship.bottom = 0
+
+
 
     def on_draw(self):
         """
@@ -28,6 +35,7 @@ class AlienArcade(arcade.Window):
         arcade.start_render()
 
         #  call all .draw() methods here
+        self.ship.draw()
 
     def update(self, delta_time):
         """
@@ -48,6 +56,7 @@ class AlienArcade(arcade.Window):
 def main():
     print("Prepare for the alien invasion.")
     game = AlienArcade()
+    game.setup()
     arcade.run()
 
 if __name__ == "__main__":
