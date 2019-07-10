@@ -3,6 +3,7 @@ import settings
 """
 Must be ran with sudo on linux.
 """
+#  TODO: fire bullets.
 class AlienArcade(arcade.Window):
     def __init__(self):
         self.ai_settings = settings.Settings()
