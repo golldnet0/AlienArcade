@@ -1,5 +1,6 @@
 import arcade
 import settings
+from ship import Ship
 """
 Must be ran with sudo on linux.
 """
@@ -15,15 +16,14 @@ class AlienArcade(arcade.Window):
 
         #  create sprite lists and set them to none
         self.alien_list = None
+        self.bullet_list = None
         self.ship = None
 
     def setup(self):
         #  Create sprites and sprite lists here
-        
-        self.ship = arcade.Sprite("images/shipBlue_manned.png")
-        self.ship.scale = 0.5
-        self.ship.center_x = self.ai_settings.screen_width / 2
-        self.ship.bottom = 0
+        self.ship = Ship(self.ai_settings)
+
+        self.bullet_list = arcade.SpriteList()
 
 
 
@@ -50,6 +50,12 @@ class AlienArcade(arcade.Window):
             self.ship.change_x = self.ai_settings.ship_speed_factor
         if key == arcade.key.LEFT:
             self.ship.change_x = -self.ai_settings.ship_speed_factor
+        if key == arcade.key.SPACE:
+            bullet = arcade.Sprite("images/bullet.png")
+            self.bullet_list.append(bullet)
+            pass
+        if key == arcade.key.ESCAPE:
+            arcade.close_window()
     
     def on_key_release(self, key, modifiers):
         if key == arcade.key.RIGHT or key == arcade.key.LEFT:
