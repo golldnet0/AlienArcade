@@ -53,7 +53,6 @@ class AlienArcade(arcade.Window):
         if key == arcade.key.SPACE:
             bullet = arcade.Sprite("images/bullet.png")
             self.bullet_list.append(bullet)
-            pass
         if key == arcade.key.ESCAPE:
             arcade.close_window()
     
