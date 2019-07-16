@@ -9,5 +9,8 @@ def main():
     ai_settings = settings.Settings()
     arcade.open_window(ai_settings.screen_width, ai_settings.screen_width, 
                        "Alien Arcade")
+    arcade.set_background_color(arcade.color.BLACK)
+
+    arcade.run()
 
 main()
