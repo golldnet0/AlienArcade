@@ -5,7 +5,6 @@ from bullet import Bullet
 """
 Must be ran with sudo on linux.
 """
-#  TODO: fire bullets.
 class AlienArcade(arcade.Window):
     def __init__(self):
         self.ai_settings = settings.Settings()
@@ -69,6 +68,7 @@ class AlienArcade(arcade.Window):
     def on_key_release(self, key, modifiers):
         if key == arcade.key.RIGHT or key == arcade.key.LEFT:
             self.ship.change_x = 0
+
 
     def on_mouse_press(self, x, y, button, modifiers):
         pass
