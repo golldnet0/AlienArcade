@@ -2,10 +2,12 @@ import arcade
 import settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 """
 Must be ran with sudo on linux.
 """
 class AlienArcade(arcade.Window):
+
     def __init__(self):
         self.ai_settings = settings.Settings()
         super().__init__(self.ai_settings.screen_width, 
@@ -19,13 +21,22 @@ class AlienArcade(arcade.Window):
         self.bullet_list = None
         self.ship = None
 
+    
+
     def setup(self):
         #  Create sprites and sprite lists here
         self.ship = Ship(self.ai_settings)
 
         self.bullet_list = arcade.SpriteList()
 
+        self.alien_list = arcade.SpriteList()
+        self.alien_setup()
 
+    def alien_setup(self):
+        an_alien = Alien(self.ai_settings)
+        an_alien.top = self.ai_settings.screen_height /2
+        an_alien.center_x = self.ai_settings.screen_width /2
+        self.alien_list.append(an_alien)
 
     def on_draw(self):
         """
@@ -39,6 +50,7 @@ class AlienArcade(arcade.Window):
         #  call all .draw() methods here
         self.ship.draw()
         self.bullet_list.draw()
+        self.alien_list.draw()
 
     def update(self, delta_time):
         """
@@ -51,6 +63,7 @@ class AlienArcade(arcade.Window):
                 self.bullet_list.remove(bullet)
 
         self.bullet_list.update()
+        self.alien_list.update()
 
     def on_key_press(self, key, modifiers):
         #TODO: Prevent ship moving offscreen.
