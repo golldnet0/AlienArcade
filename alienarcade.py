@@ -55,9 +55,9 @@ class AlienArcade(arcade.Window):
     def on_key_press(self, key, modifiers):
         #TODO: Prevent ship moving offscreen.
         if key == arcade.key.RIGHT:
-            self.ship.change_x = self.ai_settings.ship_speed_factor
+           self.ship.move_right = True
         if key == arcade.key.LEFT:
-            self.ship.change_x = -self.ai_settings.ship_speed_factor
+            self.ship.move_left = True
         if key == arcade.key.SPACE:
             if len(self.bullet_list) < 3:
                 bullet = Bullet(self.ai_settings, self.ship)
@@ -66,8 +66,11 @@ class AlienArcade(arcade.Window):
             arcade.close_window()
     
     def on_key_release(self, key, modifiers):
-        if key == arcade.key.RIGHT or key == arcade.key.LEFT:
-            self.ship.change_x = 0
+        if key == arcade.key.RIGHT:
+            #self.ship.change_x = 0
+            self.ship.move_right = False
+        if key == arcade.key.LEFT:
+            self.ship.move_left = False
 
 
     def on_mouse_press(self, x, y, button, modifiers):

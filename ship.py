@@ -12,7 +12,17 @@ class Ship(arcade.Sprite):
         self.move_left = False
 
     def update(self): 
-        self.center_x += self.change_x
+        """
+        Updates ship's position (movement)
+        Overrides the update method in arcade.Sprite
+        """
+        #  The example code provided in the official API doesn't account for 
+        #  pressing left and right at the same time as they're switching
+        #  directions. Using flags instead creates a smoother movement.
+        if self.move_right:
+            self.center_x += self.ai_settings.ship_speed_factor
+        if self.move_left:
+            self.center_x -= self.ai_settings.ship_speed_factor
 
         if self.right > self.ai_settings.screen_width:
             self.right = self.ai_settings.screen_width - 1
