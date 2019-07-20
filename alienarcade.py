@@ -75,8 +75,21 @@ class AlienArcade(arcade.Window):
         self.ship.update()
 
         for bullet in self.bullet_list:
+            #  Grab any aliens that the bullet is colliding with and put it into 
+            #  a list.
+            hit_list = arcade.check_for_collision_with_list(bullet, self.alien_list)
+            
+            # if the bullet hits anything, remove it
+            if len(hit_list) > 0:
+                bullet.kill()
+
+            for alien in hit_list:
+                alien.kill()
+
+            #  remove off-screen bullets
             if bullet.bottom > self.ai_settings.screen_height:
                 self.bullet_list.remove(bullet)
+
 
         self.bullet_list.update()
         self.move_fleet()
