@@ -24,13 +24,13 @@ class Settings():
         self.initizlize_dynamic_settings()
 
     def initizlize_dynamic_settings(self):
-        self.ship_speed_factor = 5  # how fast the ship will move (1.5px)
+        self.ship_speed_factor = 5  # how fast the ship will move 
         self.ship_lives = 2
-        self.bullet_speed_factor = 5
+        self.bullet_speed_factor = 10
         self.alien_speed_factor = 1
 
-        #  +1 means to the right on the horizontal axis
-        self.fleet_direction = 1
+        #  Alien fleet direction. False means the fleet is moving left.
+        self.move_fleet_right = True
 
     def increase_speed(self):
         self.ship_speed_factor *= self.speedup_scale

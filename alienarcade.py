@@ -1,5 +1,6 @@
 import arcade
 import settings
+import math
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -21,8 +22,6 @@ class AlienArcade(arcade.Window):
         self.bullet_list = None
         self.ship = None
 
-    
-
     def setup(self):
         #  Create sprites and sprite lists here
         self.ship = Ship(self.ai_settings)
@@ -32,11 +31,28 @@ class AlienArcade(arcade.Window):
         self.alien_list = arcade.SpriteList()
         self.alien_setup()
 
+
     def alien_setup(self):
+        #  Create an alien for measurement purposes.
         an_alien = Alien(self.ai_settings)
-        an_alien.top = self.ai_settings.screen_height /2
-        an_alien.center_x = self.ai_settings.screen_width /2
-        self.alien_list.append(an_alien)
+
+        #  how many aliens will fit in a row?
+        aliens_per_row = math.floor(self.ai_settings.screen_width / 
+                                    (an_alien.width *2)) - 1
+
+        #  how many aliens will fit in a column?
+        aliens_per_col = math.floor(self.ai_settings.screen_height / 
+                                    an_alien.width) - 3
+
+        #  spawn aliens
+        for alien_y in range(aliens_per_col):
+            for alien_x in range(aliens_per_row):
+                some_alien = Alien(self.ai_settings)
+                some_alien.left = some_alien.width/2 + (alien_x * some_alien.width *2)
+                some_alien.bottom = self.ai_settings.screen_height - (some_alien.height + (alien_y * some_alien.height))
+                self.alien_list.append(some_alien)
+
+        an_alien.kill()
 
     def on_draw(self):
         """
@@ -63,24 +79,63 @@ class AlienArcade(arcade.Window):
                 self.bullet_list.remove(bullet)
 
         self.bullet_list.update()
+        self.move_fleet()
         self.alien_list.update()
 
+    def move_fleet(self):
+        change_direction = False
+
+        # Find out if an alien has touched either wall
+        for an_alien in self.alien_list:
+            if (an_alien.right >= self.ai_settings.screen_width or
+                an_alien.left <= 0):
+                self.change_fleet_direction()
+                change_direction = True
+                break
+
+        #  if not, don't change their y position
+        if not change_direction:
+            for alien in self.alien_list:
+                alien.change_y = 0
+
+        #  move fleet across the x axis depending if they are moving left/right
+        if self.ai_settings.move_fleet_right:
+            for alien in self.alien_list:
+                alien.change_x = self.ai_settings.alien_speed_factor
+        else:
+            for alien in self.alien_list:
+                alien.change_x = -self.ai_settings.alien_speed_factor
+
+    def change_fleet_direction(self):
+        """
+        If the fleet is touching a wall, move the fleet down a bit and change
+        direction.
+        """
+        for alien in self.alien_list:
+            alien.change_y = -(self.ai_settings.fleet_drop_speed)
+
+        self.ai_settings.move_fleet_right = not self.ai_settings.move_fleet_right
+
+
     def on_key_press(self, key, modifiers):
-        #TODO: Prevent ship moving offscreen.
+        #  move left and right
         if key == arcade.key.RIGHT:
            self.ship.move_right = True
         if key == arcade.key.LEFT:
             self.ship.move_left = True
+        
+        #  fire bullets
         if key == arcade.key.SPACE:
             if len(self.bullet_list) < 3:
                 bullet = Bullet(self.ai_settings, self.ship)
                 self.bullet_list.append(bullet)
+
+        #  quit the game
         if key == arcade.key.ESCAPE:
             arcade.close_window()
     
     def on_key_release(self, key, modifiers):
         if key == arcade.key.RIGHT:
-            #self.ship.change_x = 0
             self.ship.move_right = False
         if key == arcade.key.LEFT:
             self.ship.move_left = False

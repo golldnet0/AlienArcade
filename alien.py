@@ -14,8 +14,9 @@ class Alien(arcade.Sprite):
         self.ai_settings = ai_settings
         self.scale = 0.6
 
-    def update(self):
-        pass
+    # def update(self):
+        #  self.center_x += self.ai_settings.alien_speed_factor
+        # pass
 
     def check_edges(self):
         """
