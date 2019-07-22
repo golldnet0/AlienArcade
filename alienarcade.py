@@ -72,6 +72,11 @@ class AlienArcade(arcade.Window):
         """
         All the logic to move and all game logic
         """
+
+        if len(self.alien_list) == 0:
+            self.setup()
+            self.ai_settings.increase_speed()
+
         self.ship.update()
 
         for bullet in self.bullet_list:
