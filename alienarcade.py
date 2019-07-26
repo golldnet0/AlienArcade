@@ -21,6 +21,7 @@ class AlienArcade(arcade.Window):
         self.alien_list = None
         self.bullet_list = None
         self.ship = None
+        self.game_running = True
 
     def setup(self):
         #  Create sprites and sprite lists here
@@ -72,33 +73,48 @@ class AlienArcade(arcade.Window):
         """
         All the logic to move and all game logic
         """
+        if self.game_running:
+            if len(self.alien_list) == 0:
+                self.setup()
+                self.ai_settings.increase_speed()
 
-        if len(self.alien_list) == 0:
-            self.setup()
-            self.ai_settings.increase_speed()
+            self.ship.update()
 
-        self.ship.update()
+            for bullet in self.bullet_list:
+                #  Grab any aliens that the bullet is colliding with and put it into 
+                #  a list.
+                hit_list = arcade.check_for_collision_with_list(bullet, self.alien_list)
+                
+                # if the bullet hits anything, remove it
+                if len(hit_list) > 0:
+                    bullet.kill()
 
-        for bullet in self.bullet_list:
-            #  Grab any aliens that the bullet is colliding with and put it into 
-            #  a list.
-            hit_list = arcade.check_for_collision_with_list(bullet, self.alien_list)
-            
-            # if the bullet hits anything, remove it
-            if len(hit_list) > 0:
-                bullet.kill()
+                for alien in hit_list:
+                    alien.kill()
 
-            for alien in hit_list:
-                alien.kill()
-
-            #  remove off-screen bullets
-            if bullet.bottom > self.ai_settings.screen_height:
-                self.bullet_list.remove(bullet)
+                #  remove off-screen bullets
+                if bullet.bottom > self.ai_settings.screen_height:
+                    self.bullet_list.remove(bullet)
 
 
-        self.bullet_list.update()
-        self.move_fleet()
-        self.alien_list.update()
+            self.bullet_list.update()
+            self.move_fleet()
+            self.aliens_reached_bottom()
+            self.alien_list.update()
+    
+    def aliens_reached_bottom(self):
+        """
+        If the aliens touch the bottom, the player loses a life and the game
+        state is reset.
+        """
+        for alien in self.alien_list:
+            if alien.bottom <= self.ship.top:
+                self.ai_settings.ship_lives -= 1
+                self.setup()
+                break
+
+        if self.ai_settings.ship_lives <= 0:
+            self.game_running = False
 
     def move_fleet(self):
         change_direction = False
