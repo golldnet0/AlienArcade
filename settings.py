@@ -18,8 +18,7 @@ class Settings():
         #  self.bullet_color = (255, 0, 0)
         self.bullets_allowed = 3
 
-        #self.fleet_drop_speed = 15
-        self.fleet_drop_speed = 70
+        self.fleet_drop_speed = 15
         self.speedup_scale = 1.1
 
         self.initizlize_dynamic_settings()

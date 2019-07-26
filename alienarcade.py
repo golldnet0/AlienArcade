@@ -21,7 +21,7 @@ class AlienArcade(arcade.Window):
         self.alien_list = None
         self.bullet_list = None
         self.ship = None
-        self.game_running = True
+        self.game_running = False
 
     def setup(self):
         #  Create sprites and sprite lists here
@@ -68,6 +68,15 @@ class AlienArcade(arcade.Window):
         self.ship.draw()
         self.bullet_list.draw()
         self.alien_list.draw()
+        if not self.game_running:
+            #Draw start button
+            arcade.draw_rectangle_filled(self.ai_settings.screen_width /2,
+                                        self.ai_settings.screen_height /2, 100,
+                                        40, arcade.color.LIGHT_GRAY)
+            arcade.draw_text("Start", self.ai_settings.screen_width/2, 
+                             self.ai_settings.screen_height/2, arcade.color.BLACK,
+                             font_size=18, width=100, align="center",
+                             anchor_x="center", anchor_y="center")
 
     def update(self, delta_time):
         """
@@ -81,8 +90,8 @@ class AlienArcade(arcade.Window):
             self.ship.update()
 
             for bullet in self.bullet_list:
-                #  Grab any aliens that the bullet is colliding with and put it into 
-                #  a list.
+                #  Grab any aliens that the bullet is colliding with and put it 
+                #  into a list.
                 hit_list = arcade.check_for_collision_with_list(bullet, self.alien_list)
                 
                 # if the bullet hits anything, remove it
@@ -176,7 +185,16 @@ class AlienArcade(arcade.Window):
 
 
     def on_mouse_press(self, x, y, button, modifiers):
-        pass
+        """
+        Method for checking for mouse pressing events.
+        """
+        #  if the game is not currently running and the user clicks in the 
+        #  start button area, it will start the game
+        if (not self.game_running and x < self.ai_settings.screen_width /2 + 50 
+        and x > self.ai_settings.screen_width/2 - 50 and
+        y < self.ai_settings.screen_height/2 + 10 and
+        y > self.ai_settings.screen_height/2 - 10):
+            self.game_running = True
 
 
 def main():
