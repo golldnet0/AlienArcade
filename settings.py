@@ -17,7 +17,7 @@ class Settings():
         self.bullet_height = 15
         #  self.bullet_color = (255, 0, 0)
         self.bullets_allowed = 3
-
+        self.ship_lives = 3
         self.fleet_drop_speed = 15
         self.speedup_scale = 1.1
 
@@ -25,7 +25,6 @@ class Settings():
 
     def initizlize_dynamic_settings(self):
         self.ship_speed_factor = 5  # how fast the ship will move 
-        self.ship_lives = 3
         self.bullet_speed_factor = 15
         self.alien_speed_factor = 2
 
