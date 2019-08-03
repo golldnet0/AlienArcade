@@ -4,6 +4,8 @@ import math
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
+from scoreboard import Scoreboard
 """
 Must be ran with sudo on linux.
 """
@@ -15,8 +17,10 @@ class AlienArcade(arcade.Window):
                          self.ai_settings.screen_height, 
                          "Alien Arcade")
         arcade.set_background_color(arcade.color.WHITE)
-        
 
+        self.gamestats = GameStats(self.ai_settings)
+        self.scoreboard = Scoreboard(self.gamestats, self.ai_settings)
+        
         #  create sprite lists and set them to none
         self.alien_list = None
         self.bullet_list = None
@@ -31,6 +35,7 @@ class AlienArcade(arcade.Window):
 
         self.alien_list = arcade.SpriteList()
         self.alien_setup()
+        
 
 
     def alien_setup(self):
@@ -50,7 +55,7 @@ class AlienArcade(arcade.Window):
             for alien_x in range(aliens_per_row):
                 some_alien = Alien(self.ai_settings)
                 some_alien.left = some_alien.width/2 + (alien_x * some_alien.width *2)
-                some_alien.bottom = self.ai_settings.screen_height - (some_alien.height + (alien_y * some_alien.height))
+                some_alien.bottom = self.ai_settings.screen_height - 50 - (some_alien.height + (alien_y * some_alien.height))
                 self.alien_list.append(some_alien)
 
         an_alien.kill()
@@ -65,9 +70,15 @@ class AlienArcade(arcade.Window):
         arcade.start_render()
 
         #  call all .draw() methods here
+        self.scoreboard.draw_score()
+        self.scoreboard.draw_high_score()
+        self.scoreboard.draw_level()
+        self.scoreboard.draw_lives()
+
         self.ship.draw()
         self.bullet_list.draw()
         self.alien_list.draw()
+        
         if not self.game_running:
             #Draw start button
             arcade.draw_rectangle_filled(self.ai_settings.screen_width /2,
@@ -86,6 +97,7 @@ class AlienArcade(arcade.Window):
             if len(self.alien_list) == 0:
                 self.setup()
                 self.ai_settings.increase_speed()
+                self.gamestats.level += 1
 
             self.ship.update()
 
@@ -100,6 +112,7 @@ class AlienArcade(arcade.Window):
 
                 for alien in hit_list:
                     alien.kill()
+                    self.gamestats.increase_score()
 
                 #  remove off-screen bullets
                 if bullet.bottom > self.ai_settings.screen_height:
@@ -118,14 +131,18 @@ class AlienArcade(arcade.Window):
         """
         for alien in self.alien_list:
             if alien.bottom <= self.ship.top:
-                self.ai_settings.ship_lives -= 1
+                self.gamestats.ship_lives -= 1
+                self.gamestats.update_highscore()
                 self.setup()
                 break
 
-        if self.ai_settings.ship_lives <= 0:
+        if self.gamestats.ship_lives <= 0:
             self.game_running = False
 
     def move_fleet(self):
+        """
+        Method for moving the alien fleet around the screen.
+        """
         change_direction = False
 
         # Find out if an alien has touched either wall
@@ -161,6 +178,9 @@ class AlienArcade(arcade.Window):
 
 
     def on_key_press(self, key, modifiers):
+        """
+        Monitors keyboard press events.
+        """
         #  move left and right
         if key == arcade.key.RIGHT:
            self.ship.move_right = True
@@ -175,7 +195,11 @@ class AlienArcade(arcade.Window):
 
         #  quit the game
         if key == arcade.key.ESCAPE:
+            print("Writing the score to the disk...")
+            self.gamestats.update_highscore()
+            self.gamestats.save_score()
             arcade.close_window()
+            
     
     def on_key_release(self, key, modifiers):
         if key == arcade.key.RIGHT:
