@@ -5,6 +5,8 @@ Art assets from Kenney.nl
 
 # Controls
 Left/Right Arrow Keys = Move
+
 Space = Fire
+
 Esc = Exit
 
