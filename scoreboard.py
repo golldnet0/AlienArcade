@@ -43,7 +43,7 @@ class Scoreboard():
         for ship_count in range(self.stats.ship_lives):
             ship_icon = arcade.load_texture("images/playerShip1_blue.png", 
                                             scale=0.3)
-            ship_icon.draw(50 + (ship_count * 40),
+            ship_icon.draw(50 + (ship_count * ship_icon.width * 0.3),
                            self.ai_settings.screen_height - 35,
                            ship_icon.width * 0.3, ship_icon.height * 0.3)
 
