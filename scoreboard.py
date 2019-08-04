@@ -41,11 +41,11 @@ class Scoreboard():
         Draws the lives as icons at the top left of the screen.
         """
         for ship_count in range(self.stats.ship_lives):
-            a_ship = arcade.Sprite("images/playerShip1_blue.png")
-            a_ship.scale = 0.3
-            a_ship.center_x = 50 + (a_ship.width * ship_count)
-            a_ship.top = self.ai_settings.screen_height - 30
-            a_ship.draw()
+            ship_icon = arcade.load_texture("images/playerShip1_blue.png", 
+                                            scale=0.3)
+            ship_icon.draw(50 + (ship_count * 40),
+                           self.ai_settings.screen_height - 35,
+                           ship_icon.width * 0.3, ship_icon.height * 0.3)
 
             
         
