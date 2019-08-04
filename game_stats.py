@@ -11,7 +11,6 @@ class GameStats:
         
         self.game_running = False
         self.ship_lives = 3
-        #TODO: save highscore to a file?
         self.high_score = 0
 
         #  attempt to get the high score from a file. otherwise the highscore

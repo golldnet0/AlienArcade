@@ -1,6 +1,6 @@
 import arcade
 
-class Bullet(arcade.Sprite):
+class Ship_Bullet(arcade.Sprite):
     """
     Class for bullets fired from the ship.
     """
